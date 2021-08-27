@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ConcentradorUS:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ConcentradorUS_jar</output-path>
+    <root id="archive" name="ConcentradorUS.jar">
+      <element id="module-output" name="ConcentradorUS" />
+    </root>
+  </artifact>
+</component>
