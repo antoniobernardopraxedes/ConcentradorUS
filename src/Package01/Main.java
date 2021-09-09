@@ -4,11 +4,11 @@ import java.net.InetAddress;
 
 //**********************************************************************************************************************
 //                                                                                                                     *                                                     *
-// Projeto: Concentrador Usina Solar                                                                                   *
+// Projeto: Atualizador do Servidor em Nuvem                                                                           *
 //                                                                                                                     *
 // Nome da Classe: Main                                                                                                *
 //                                                                                                                     *
-// Funcao: efetua a comunicação com a UTR em protocolo CoAP e envia as informações para o Servidor na Nuvem            *
+// Funcao: efetua a comunicação com o Concentrador em protocolo CoAP e envia as informações para o Servidor na Nuvem   *
 //                                                                                                                     *
 //**********************************************************************************************************************
 //
@@ -16,11 +16,12 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        boolean Verbose = false;
+        boolean Verbose = true;
+        boolean MsgJson = true;
 
-        String EndIPSrv = "200.98.140.180";
+        //String EndIPSrv = "200.98.140.180";
+        String EndIPSrv = "192.168.0.49";
         int PortaSrv = 8080;
-        String Metodo = "POST";
         String Recurso = "atualiza";
 
         String IPConcArd = "192.168.0.150";
@@ -47,13 +48,13 @@ public class Main {
             Caminho = "/home/pi/Desktop/Programas/";
             IPHost = "192.168.0.170";
 
-            Util.Terminal("Concentrador Iniciado no Computador Raspberry PI 3", true, true);
+            Util.Terminal("Atualizador Iniciado no Computador Raspberry PI 3", true, true);
         }
         if (NomeComputador.equals("BernardoLinux")) {
             Caminho = "/home/antonio/ExecJava/";
             IPHost = "192.168.0.49";
             Verbose = true;
-            Util.Terminal("Concentrador Iniciado no Computador BernardoLinux", true, Verbose);
+            Util.Terminal("Atualizador Iniciado no Computador BernardoLinux", true, Verbose);
         }
 
         int cont = 0;
@@ -65,34 +66,47 @@ public class Main {
                 cont = cont + 1;
                 SegundoAnterior = Segundo;
             }
+            String MsgRec = "";
+            byte[] MsgEnvSrv = new byte[0];
             if (cont >= 4) {
+                if (Verbose) System.out.println(" ");
+                MsgRec = "";
+                MsgEnvSrv = EnvRecMsg.CoAPUDP(IPConcArd, PortaUDP, "estados", ContMsgCoAP, Comando, Verbose);
 
-                byte[] MsgEnvSrv = EnvRecMsg.CoAPUDP(IPConcArd, PortaUDP, "estados", ContMsgCoAP, Comando, Verbose);
+                if (MsgJson) {
+                    String MsgJsonSrv = EnvRecMsg.MontaJson();
+                    MsgRec = EnvRecMsg.EnvString(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
+                }
+                else {
+                    MsgRec = EnvRecMsg.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
+                }
+                cont = 0;
+            }
 
-                String MsgRec = EnvRecMsg.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Metodo, Recurso, Verbose);
-                if (!MsgRec.isEmpty()) {
-                    String Tk1 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-                    String Tk2 = "<CMD>";
-                    String Tk3 = "</CMD>";
-                    String Cmd = "";
-                    int indice1 = 0;
-                    int indice2 = 0;
-                    if (MsgRec.contains(Tk1) && MsgRec.contains(Tk2) && MsgRec.contains(Tk3)) {
-                        indice1 = MsgRec.indexOf("<CMD>") + 5;
-                        indice2 = MsgRec.indexOf("</CMD>");
-                        Cmd = MsgRec.substring(indice1, indice2);
-                        if (!(Cmd.isEmpty())) {
-                            Comando = ExecComandoHTTP(Cmd, Verbose);
-                            Util.Terminal("Comando Recebido: " + Cmd, false, Verbose);
-                        }
-                    } else {
-                        Util.Terminal("Recebida Mensagem de Resposta Inválida", false, Verbose);
+            if (!MsgRec.isEmpty()) {
+                String Tk2 = "<CMD>";
+                String Tk3 = "</CMD>";
+                String Cmd = "";
+                int indice1 = 0;
+                int indice2 = 0;
+                if (MsgRec.contains(Tk2) && MsgRec.contains(Tk3)) {
+                    indice1 = MsgRec.indexOf("<CMD>") + 5;
+                    indice2 = MsgRec.indexOf("</CMD>");
+                    Cmd = MsgRec.substring(indice1, indice2);
+                    if (!(Cmd.isEmpty())) {
+                        Comando = ExecComandoHTTP(Cmd, Verbose);
+                        Util.Terminal("Rec Msg de Comando do Serv: " + Cmd, false, Verbose);
                     }
-                    cont = 0;
-                } // if (!MsgRec.isEmpty())
-            } // if (cont >= 4)
-        } // while (true)
-    } // public static void main(String[] args) throws IOException
+                    else {
+                        Util.Terminal("Rec Msg de Reconhecimento do Serv", false, Verbose);
+                    }
+}
+            else {
+                    Util.Terminal("Rec Msg Desconhecida do Serv", false, Verbose);
+            }
+        }
+        } // while (!fim)
+    }
 
 
     //******************************************************************************************************************
