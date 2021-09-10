@@ -1,6 +1,8 @@
 package Package01;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 
 //**********************************************************************************************************************
 //                                                                                                                     *                                                     *
@@ -20,7 +22,8 @@ public class Main {
         boolean MsgJson = true;
 
         //String EndIPSrv = "200.98.140.180";
-        String EndIPSrv = "192.168.0.49";
+        //String EndIPSrv = "192.168.0.49";
+        String EndIPSrv = "localhost";
         int PortaSrv = 8080;
         String Recurso = "atualiza";
 
@@ -30,7 +33,8 @@ public class Main {
         int TamMsgCoAP = 320;
 
         String Caminho = "/home/";
-        String IPHost = "192.168.0.170";
+        //String IPHost = "192.168.0.170";
+        String IPHost = "localhost";
         int Comando = 0;
 
         byte DH [] = new byte[6];
@@ -69,18 +73,29 @@ public class Main {
             String MsgRec = "";
             byte[] MsgEnvSrv = new byte[0];
             if (cont >= 4) {
+
+                Socket socket = new Socket(EndIPSrv, PortaSrv);
+                socket.setSoTimeout(3000);
+
+                if (socket.isConnected()) {
+                    String MsgTerm = "Atualizador conectou ao Socket: " + socket.toString();
+                    Util.Terminal(MsgTerm, false, Verbose);
+                }
+
                 if (Verbose) System.out.println(" ");
                 MsgRec = "";
                 MsgEnvSrv = EnvRecMsg.CoAPUDP(IPConcArd, PortaUDP, "estados", ContMsgCoAP, Comando, Verbose);
 
                 if (MsgJson) {
-                    String MsgJsonSrv = EnvRecMsg.MontaJson();
-                    MsgRec = EnvRecMsg.EnvString(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
+                    String MsgJsonSrv = "{ \"cmd\" : \"001\" }";
+                    MsgRec = EnvRecMsg.EnvString(socket, IPHost, MsgJsonSrv, Recurso, Verbose );
                 }
                 else {
-                    MsgRec = EnvRecMsg.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
+                    MsgRec = EnvRecMsg.BinSrv(socket, IPHost, MsgEnvSrv, Recurso, Verbose);
                 }
+                Util.Terminal("Mensagem recebida do servidor: " + MsgRec, false, Verbose);
                 cont = 0;
+                socket.close();
             }
 
             if (!MsgRec.isEmpty()) {
@@ -100,11 +115,11 @@ public class Main {
                     else {
                         Util.Terminal("Rec Msg de Reconhecimento do Serv", false, Verbose);
                     }
-}
-            else {
+                }
+                else {
                     Util.Terminal("Rec Msg Desconhecida do Serv", false, Verbose);
+                }
             }
-        }
         } // while (!fim)
     }
 
