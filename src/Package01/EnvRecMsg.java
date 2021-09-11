@@ -418,7 +418,9 @@ public class EnvRecMsg {
         short numObj = 21;
         MsgJson = "{ ";
         for (short i = 0; i < numObj; i++) {
-            MsgJson = MsgJson + "\"" + key[i].toLowerCase(Locale.ROOT) + "\"" + " : " + "\"" + value[i].toLowerCase(Locale.ROOT) + "\"";
+            MsgJson = MsgJson + "\"" + key[i].toLowerCase(Locale.ROOT) + "\"" + " : "
+                              + "\"" + value[i].toLowerCase(Locale.ROOT) + "\"";
+
             if (i < (numObj - 1)) { MsgJson = MsgJson + ",";}
             //MsgJson = MsgJson + "\n";
         }
@@ -439,23 +441,23 @@ public class EnvRecMsg {
     //                                                                                                                 *
     //******************************************************************************************************************
     //
-    static String BinSrv(Socket socket, String IPHost, byte[] ByteBuf, String Recurso, boolean Verbose) {
+    static String BinSrv(String EndIPSrv, int PortaSrv, String IPHost, byte[] ByteBuf, String Recurso, boolean Verbose) {
         String MsgRec = "";
         String Metodo = "POST";
         PrintWriter EnvChar = null; BufferedOutputStream EnvByte = null;
         InputStreamReader RecByte = null; BufferedReader RecChar = null;
 
         try {
-            //Socket socket = new Socket(EndIP, Porta);  // Cria o socket de conexão no Servidor HTTP PraxServer
+            Socket socket = new Socket(EndIPSrv, PortaSrv);
+            socket.setSoTimeout(3000);
+
+            if (socket.isConnected()) {
+                String MsgTerm = "Atualizador conectou ao Socket: " + socket.toString();
+                Util.Terminal(MsgTerm, false, Verbose);
+            }
             EnvByte = new BufferedOutputStream(socket.getOutputStream());
             EnvChar = new PrintWriter(EnvByte, true);
             RecChar = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            //socket.setSoTimeout(3000);
-
-            //if (socket.isConnected()) {
-            //    String MsgTerm = "Atualizador conectou ao Socket: " + socket.toString();
-            //    Util.Terminal(MsgTerm, false, Verbose);
-            //}
 
             int TamMsgBin = ByteBuf.length;
             String CabXML = Metodo + " /" + Recurso + " HTTP/1.1\r\n";
@@ -494,7 +496,7 @@ public class EnvRecMsg {
 
     //*****************************************************************************************************************
     //                                                                                                                *
-    // Nome do Método: EnvString                                                                                      *
+    // Nome do Método: Json                                                                                           *
     //	                                                                                                              *
     // Funcao: envia para o cliente conectado uma mensagem HTTP lida de uma String                                    *
     //                                                                                                                *
@@ -505,44 +507,61 @@ public class EnvRecMsg {
     //	                                                                                                              *
     //*****************************************************************************************************************
     //
-    public static String EnvString(Socket socket, String IPHost, String Msg, String Recurso, boolean Verbose) {
+    public static String JsonSrv(String IPSrv, int Porta, String IPHost, String Msg, String Recurso, boolean Verbose) {
 
         PrintWriter out = null;
+        PrintWriter EnvChar = null; BufferedOutputStream EnvByte = null;
+        InputStreamReader RecByte = null; BufferedReader RecChar = null;
+
         String MsgRec = "";
-        String Metodo = "POST";
-        String Tipo = "text/json";
 
         try {
-            out = new PrintWriter(socket.getOutputStream());
+            Socket socket = new Socket(IPSrv, Porta);
+            socket.setSoTimeout(3000);
 
+            if (socket.isConnected()) {
+                String MsgTerm = "O Cliente Atualizador conectou ao " + socket.toString();
+                Util.Terminal(MsgTerm, false, Verbose);
+            }
+            out = new PrintWriter(socket.getOutputStream());
+            EnvByte = new BufferedOutputStream(socket.getOutputStream());
+            EnvChar = new PrintWriter(EnvByte, true);
+            RecChar = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             int TamMsg = Msg.length();
-            out.println(Metodo + " /" + Recurso + " HTTP/1.1\r");
-            out.println("Host: " + IPHost + ":8080\r");
-            out.println("Content-length: " + TamMsg + "\r");
-            out.println("Content-type: " + Tipo + "\r");
-            out.println("User-Agent: (Linux x86_64) PraxClient/1.0\r");
-            out.println();
-            out.print(Msg);
-            out.flush();
 
-            Util.Terminal("Enviada Mensagem HTTP do tipo " + Tipo + " com " + TamMsg + " Caracteres", false, Verbose);
+            // Envia o Cabeçalho HTTP para o Servidor
+            EnvChar.println("POST /" + Recurso + " HTTP/1.1\r");
+            EnvChar.println("Content-Type: application/json;charset=utf-8\r");
+            EnvChar.println("User-Agent: (Linux x86_64) PraxClient/1.0\r");
+            EnvChar.println("Accept: */*\r");
+            EnvChar.println("Host: " + IPHost + ":8080\r");
+            EnvChar.println("Accept-Encoding: gzip, deflate, br\r");
+            EnvChar.println("Connection: keep-alive\r");
+            EnvChar.println("Content-length: " + TamMsg + "\r");
+
+            // Envia a Mensagem em Formato Json (UTF-8) para o Servidor
+            EnvChar.println();
+            EnvChar.print(Msg);
+            EnvChar.flush();
+
+            Util.Terminal("Enviada Mensagem HTTP application/json com "
+                               + TamMsg + " Caracteres para o Servidor", false, Verbose);
 
             try {
-                BufferedReader RecChar = null;
-                RecChar = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 String linha;
                 while ((linha = RecChar.readLine()) != null) {
                     MsgRec = MsgRec + linha + "\n";
                 }
+                Util.Terminal("Mensagem Recebida do Servidor: " + MsgRec, false, Verbose);
             }
-            catch(java.net.SocketTimeoutException | NullPointerException tmo) {
-                //Util.Terminal("Timeout na resposta do Servidor", false, Verbose);
+            catch(java.net.SocketTimeoutException tmo) {
+                Util.Terminal("Timeout na resposta do Servidor", false, Verbose);
             }
-
+            socket.close();
         }
         catch (IOException ioe) {
-            Util.Terminal("Erro ao enviar a mensagem HTTP", false, Verbose);
+            Util.Terminal("Erro ao enviar a mensagem HTTP para o Servidor", false, Verbose);
         }
         return MsgRec;
 
