@@ -164,7 +164,7 @@ public class EnvRecMsg {
 
         // Estados Gerais
         String StrMdOp = "Economia";
-        if (MdOp == 1) {	StrMdOp = "Normal";	}
+        if (MdOp == 1) { StrMdOp = "Normal"; }
 
         String StrMdCom = "Local";
         if (MdCom == 1) { StrMdCom = "Remoto"; }
@@ -216,9 +216,6 @@ public class EnvRecMsg {
                 break;
 
             case 4:  //  EstadoCxAz = 4 => Estado da Caixa Azul = Falha de Sinalizacao 1
-                StrEstCxAzul = "Falha Boia";
-                StrNivCxAzul = "";
-                break;
 
             case 5:  // EstadoCxAz = 5 => Estado da Caixa Azul = Falha de Sinalizacao 2
                 StrEstCxAzul = "Falha Boia";
@@ -239,7 +236,7 @@ public class EnvRecMsg {
             StrAlRedeBomba = "Falta CA";
         }
 
-        String StrIv1Lig = "Rede";                		// Fonte de energia da bomba
+        String StrIv1Lig = "Rede"; 		// Fonte de energia da bomba
         if (Iv1Lig == 1) {
             StrIv1Lig = "Inversor 1";
         }
@@ -249,19 +246,21 @@ public class EnvRecMsg {
             }
         }
 
-        String StrEstBomba = "Desligada";            // Estado da alimentação da bomba
+        // Estado da alimentação da bomba
+        String StrEstBomba = "Desligada";
         if (CircBomba == 1) { StrEstBomba = "Ligada"; }
 
-        String StrEstFonteCC1 = "";            		 // Estado das Fontes CC1 e CC2
+        // Estado das Fontes CC1 e CC2
+        String StrEstFonteCC1 = "";
         String StrEstFonteCC2 = "";
-        if (EstRede == 1) {                 	             // Se a tensao da Rede esta OK,
-            if (FonteCC1Ligada == 1) {      	             // e se a fonte CC1 está fornecendo tensão,
+        if (EstRede == 1) {                 	     // Se a tensao da Rede esta OK,
+            if (FonteCC1Ligada == 1) {      	     // e se a fonte CC1 está fornecendo tensão,
                 StrEstFonteCC1 = "Ligada";     	     // Carrega a mensagem de que a fonte CC1 está ligada
             }
             else {                             	     // Se a fonte CC1 não está fornecendo tensão,
                 StrEstFonteCC1 = "Desligada";  	     // Carrega a mensagem de que a fonte CC1 está desligada
             }
-            if (FonteCC2Ligada == 1) {      	             // e se a fonte CC2 está fornecendo tensão,
+            if (FonteCC2Ligada == 1) {      	     // e se a fonte CC2 está fornecendo tensão,
                 StrEstFonteCC2 = "Ligada";     	     // Carrega a mensagem de que a fonte CC1 está ligada
             }
             else {                             	     // Se a fonte CC1 não está fornecendo tensão,
@@ -269,7 +268,7 @@ public class EnvRecMsg {
             }
         }
         else {                                 	     // Se falta CA,
-            if (FonteCC1Ligada == 1) {            	     // e se a saida da fonte está sem tensao,
+            if (FonteCC1Ligada == 1) {            	 // e se a saida da fonte está sem tensao,
                 StrEstFonteCC1 = "Falta CA";   	     // Carrega a mensagem de que Falta CA
             }
             else {
@@ -283,6 +282,7 @@ public class EnvRecMsg {
             }
         }
 
+        // Estados do Inversor 2
         String StrEstIv2 = "Desligado";
         String StrEstVSIv2 = "      ";
         if (Iv2Lig == 1) {
@@ -299,15 +299,16 @@ public class EnvRecMsg {
         }
 
         String StrEstTDIv2 = "          ";
-        if (TDInv2 < 4600) { StrEstTDIv2 = "Normal";	}
+        if (TDInv2 < 4600) { StrEstTDIv2 = "Normal"; }
         if ((TDInv2 >= 4600) && (TDInv2 < 5000)) { StrEstTDIv2 = "Alta"; }
         if (TDInv2 >= 5000) { StrEstTDIv2 = "Muito Alta"; }
 
         String StrEstTTIv2 = "          ";
-        if (TTInv2 < 4600) { StrEstTTIv2 = "Normal";	}
+        if (TTInv2 < 4600) { StrEstTTIv2 = "Normal"; }
         if ((TTInv2 >= 4600) && (TTInv2 < 5000)) { StrEstTTIv2 = "Alta"; }
         if (TTInv2 >= 5000) { StrEstTTIv2 = "Muito Alta"; }
 
+        // EStados do Inversor 1
         String StrEstIv1 = "Desligado";
         String StrEstVSIv1 = "      ";
         if (Iv1Lig == 1) {
@@ -333,13 +334,14 @@ public class EnvRecMsg {
         String CorTTIv1 = "";
         if (TTInv1 >= 5000) { CorTTIv1 = "style='color:red;'"; }
 
+        // Estado da Tensão da Rede
         String StrEstRede = "";
         if (EstRede == 1) {
-            if (VRede > 19000) { StrEstRede = "Normal"; }
-            else { StrEstRede = "(Baixa)"; }
+            if (VRede > 19000) { StrEstRede = "Normal"; } else { StrEstRede = "(Baixa)"; }
         }
         else { StrEstRede = "Falta CA"; }
 
+        // Estados da Carga 3 (Geladeira)
         String StrEstValCg3 = "         ";
         if (Icarga3 < 100) { StrEstValCg3 = "Deslig"; }
         if (Icarga3 > 400) { StrEstValCg3 = "Ligada"; }
@@ -351,9 +353,9 @@ public class EnvRecMsg {
         if ((VBat > 2760) && (VBat < 2900)) { StrEstValVBat = "Equalização"; }
         if (VBat > 2900) { StrEstValVBat = "Alta"; }
 
+        // Estados da Bateria
         String StrEstIBat = "        ";
-        if (CDBat == 1) { StrEstIBat = "Descarga"; }
-        else { StrEstIBat = "Carga"; }
+        if (CDBat == 1) { StrEstIBat = "Descarga"; } else { StrEstIBat = "Carga"; }
 
         String CorTBat = "";
         if (TBat > 4000) { CorTBat = "style='color:red;'"; }
@@ -361,72 +363,113 @@ public class EnvRecMsg {
         String StrSaudeBat = "Normal";
         if (SDBat < 85) { StrSaudeBat = "Atenção"; }
 
+        // Estados da Tensão dos Paineis
         String StrValVP12 = "      ";
-        if (VP12 < 3000) { StrValVP12 = "Baixa"; }
-        if (VP12 >= 3000) { StrValVP12 = "Normal"; }
+        if (VP12 < 3000) { StrValVP12 = "Baixa"; } else  { StrValVP12 = "Normal"; }
 
         String StrValVP34 = "      ";
-        if (VP34 < 3000) { StrValVP34 = "Baixa"; }
-        if (VP34 >= 3000) { StrValVP34 = "Normal"; }
+        if (VP34 < 3000) { StrValVP34 = "Baixa"; } else { StrValVP34 = "Normal"; }
 
-        String[] key = new String[50];
-        String[] value = new String[50];
+        // Montagem da Mensagem Json
+        short numObj = 66;
+        String[][] KeyValue = new String[numObj][2];
 
-        key[0] = "COMCNV";
-        value[0] = "Normal";
-        key[1] = "COMCNC";
-        value[1] = StrEstCom1;
-        key[2] = "COMUTR";
-        value[2] = StrEstComUTR;
-        key[3] = "COMCC1";
-        value[3] = StrEstComCC1;
-        key[4] = "COMCC2";
-        value[4] = StrEstComCC2;
-        key[5] = "CLK";
-        value[5] = Util.ImpHora(Hora, Minuto, Segundo);
-        key[6] = "DATA";
-        value[6] = Util.ImpData(Dia, Mes, Ano);
-        key[7] = "CMDEX";
-        value[7] = "Atualiza";
-        key[8] = "MDOP";
-        value[8] = StrMdOp;
-        key[9] = "MDCOM";
-        value[9] = StrMdCom;
-        key[10] = "MDCT1";
-        value[10] = StrMdCtrl1;
-        key[11] = "MDCT234";
-        value[11] = StrMdCtrl;
-        key[12] = "ENCG1";
-        value[12] = StrCT2Inv;
-        key[13] = "ENCG2";
-        value[13] = StrCT1Inv;
-        key[14] = "ENCG3";
-        value[14] = StrCT3Inv;
-        key[15] = "ICG3";
-        value[15] = Util.FrmAna3(Icarga3," A");
-        key[16] = "VBAT";
-        value[16] = Util.FrmAna(VBat," V");
-        key[17] = "VREDE";
-        value[17] = Util.FrmAna(VRede," V");
-        key[18] = "ESTVRD";
-        value[18] = StrEstRede;
-        key[19] = "TBAT";
-        value[19] = Util.FrmAna(TBat,"°C");
-        key[20] = "SDBAT";
-        value[20] = Util.FrmAnaInt(SDBat," %");
+        // Estados de Comunicação
+        KeyValue[0] = EntKeyValue("COMCNV", "Normal");
+        KeyValue[1] = EntKeyValue("COMCNC", StrEstCom1);
+        KeyValue[2] = EntKeyValue("COMUTR", StrEstComUTR);
+        KeyValue[3] = EntKeyValue("COMCC1", StrEstComCC1);
+        KeyValue[4] = EntKeyValue("COMCC2", StrEstComCC2);
 
-        short numObj = 21;
-        MsgJson = "{ ";
+        // Estados e Medidas Gerais
+        KeyValue[5] = EntKeyValue("CLK", Util.ImpHora(Hora, Minuto, Segundo));
+        KeyValue[6] = EntKeyValue("DATA", Util.ImpData(Dia, Mes, Ano));
+        KeyValue[7] = EntKeyValue("CMDEX", "Atualiza");
+        KeyValue[8] = EntKeyValue("MDOP", StrMdOp);
+        KeyValue[9] = EntKeyValue("MDCOM", StrMdCom);
+        KeyValue[10] = EntKeyValue("MDCT1", StrMdCtrl1);
+        KeyValue[11] = EntKeyValue("MDCT234", StrMdCtrl);
+        KeyValue[12] = EntKeyValue("ENCG1", StrCT2Inv);
+        KeyValue[13] = EntKeyValue("ENCG2", StrCT1Inv);
+        KeyValue[14] = EntKeyValue("ENCG3", StrCT3Inv);
+        KeyValue[15] = EntKeyValue("ICG3", Util.FrmAna3(Icarga3," A"));
+        KeyValue[16] = EntKeyValue("VBAT", Util.FrmAna(VBat," V"));
+        KeyValue[17] = EntKeyValue("VREDE", Util.FrmAna(VRede," V"));
+        KeyValue[18] = EntKeyValue("ESTVRD", StrEstRede);
+        KeyValue[19] = EntKeyValue("TBAT", Util.FrmAna(TBat," C"));
+        KeyValue[20] = EntKeyValue("SDBAT", Util.FrmAnaInt(SDBat," %"));
+
+        // Estados e Medidas da Caixa d'Água e Bomba (7 Variáveis)
+        KeyValue[21] = EntKeyValue("ESTCXAZ", StrEstCxAzul);
+        KeyValue[22] = EntKeyValue("NIVCXAZ", StrNivCxAzul);
+        KeyValue[23] = EntKeyValue("ESTBMB", StrEstBomba);
+        KeyValue[24] = EntKeyValue("ESTDJB", StrEstAlimBoia);
+        KeyValue[25] = EntKeyValue("ESTDJRB", StrAlRedeBomba);
+        KeyValue[26] = EntKeyValue("ENBMB", StrIv1Lig);
+        KeyValue[27] = EntKeyValue("TMPBL", Util.FormAnaHora(TmpBmbLig));
+
+        // Geração Solar e Consumo (18 variáveis)
+        KeyValue[28] = EntKeyValue("VP12", Util.FrmAna(VP12," V"));
+        KeyValue[29] = EntKeyValue("IS12", Util.FrmAna(IS12," A"));
+        KeyValue[30] = EntKeyValue("ISCC1", Util.FrmAna(ISCC1," A"));
+        KeyValue[31] = EntKeyValue("WSCC1", Util.FrmAna(WSCC1," W"));
+        KeyValue[32] = EntKeyValue("SDCC1", Util.FrmAnaInt(SDCC1," %"));
+        KeyValue[33] = EntKeyValue("VP34", Util.FrmAna(VP34," V"));
+        KeyValue[34] = EntKeyValue("IS34", Util.FrmAna(IS34," A"));
+        KeyValue[35] = EntKeyValue("ISCC2", Util.FrmAna(ISCC2," A"));
+        KeyValue[36] = EntKeyValue("WSCC2", Util.FrmAna(WSCC2," W"));
+        KeyValue[37] = EntKeyValue("SDCC2", Util.FrmAnaInt(SDCC2," %"));
+        KeyValue[38] = EntKeyValue("ITOTGER", Util.FrmAna(ITotGer," A"));
+        KeyValue[39] = EntKeyValue("WTOTGER", Util.FrmAna(WTotGer," W"));
+        KeyValue[40] = EntKeyValue("ITOTCG", Util.FrmAna(ITotCg," A"));
+        KeyValue[41] = EntKeyValue("WTOTCG", Util.FrmAna(WTotCg," W"));
+        KeyValue[42] = EntKeyValue("ESTFT1", StrEstFonteCC1);
+        KeyValue[43] = EntKeyValue("ESTFT2", StrEstFonteCC2);
+        KeyValue[44] = EntKeyValue("ICIRCC", Util.FrmAna3(ICircCC," A"));
+        KeyValue[45] = EntKeyValue("WCIRCC", Util.FrmAna(WCircCC," W"));
+
+        // Informação do Inversor 2 (10 Variáveis)
+        KeyValue[46] = EntKeyValue("ESTIV2", StrEstIv2);
+        KeyValue[47] = EntKeyValue("IEIV2", Util.FrmAna(IEIv2," A"));
+        KeyValue[48] = EntKeyValue("WEIV2", Util.FrmAna(WEIv2," W"));
+        KeyValue[49] = EntKeyValue("VSIV2", Util.FrmAna(VSIv2," V"));
+        KeyValue[50] = EntKeyValue("ISIV2", Util.FrmAna3(ISInv2," A"));
+        KeyValue[51] = EntKeyValue("WSIV2", Util.FrmAna(WSInv2," W"));
+        KeyValue[52] = EntKeyValue("TDIV2", Util.FrmAna(TDInv2," C"));
+        KeyValue[53] = EntKeyValue("TTIV2", Util.FrmAna(TTInv2," C"));
+        KeyValue[54] = EntKeyValue("EFIV2", Util.FrmAnaInt(EfIv2," %"));
+        KeyValue[55] = EntKeyValue("SDIV2", Util.FrmAnaInt(SDIv2," %"));
+
+        // Informação do Inversor 1 (10 Variáveis)
+        KeyValue[56] = EntKeyValue("ESTIV1", StrEstIv2);
+        KeyValue[57] = EntKeyValue("IEIV1", Util.FrmAna(IEIv1," A"));
+        KeyValue[58] = EntKeyValue("WEIV1", Util.FrmAna(WEIv1," W"));
+        KeyValue[59] = EntKeyValue("VSIV1", Util.FrmAna(VSIv1," V"));
+        KeyValue[60] = EntKeyValue("ISIV1", Util.FrmAna3(ISInv1," A"));
+        KeyValue[61] = EntKeyValue("WSIV1", Util.FrmAna(WSInv1," W"));
+        KeyValue[62] = EntKeyValue("TDIV1", Util.FrmAna(TDInv1," C"));
+        KeyValue[63] = EntKeyValue("TTIV1", Util.FrmAna(TTInv1," C"));
+        KeyValue[64] = EntKeyValue("EFIV1", Util.FrmAnaInt(EfIv1," %"));
+        KeyValue[65] = EntKeyValue("SDIV1", Util.FrmAnaInt(SDIv1," %"));
+
+        MsgJson = "{\n";
         for (short i = 0; i < numObj; i++) {
-            MsgJson = MsgJson + "\"" + key[i].toLowerCase(Locale.ROOT) + "\"" + " : "
-                              + "\"" + value[i].toLowerCase(Locale.ROOT) + "\"";
+            MsgJson = MsgJson + "\"" + KeyValue[i][0].toLowerCase(Locale.ROOT) + "\"" + " : "
+                              + "\"" + KeyValue[i][1] + "\"";
 
             if (i < (numObj - 1)) { MsgJson = MsgJson + ",";}
-            //MsgJson = MsgJson + "\n";
+            MsgJson = MsgJson + "\n";
         }
         MsgJson = MsgJson + " }";
 
         return MsgJson;
+    }
+
+    private static String[] EntKeyValue(String Key, String Value) {
+        String[] keyvalue = new String[2];
+        keyvalue[0] = Key;
+        keyvalue[1] = Value;
+        return (keyvalue);
     }
 
     //******************************************************************************************************************

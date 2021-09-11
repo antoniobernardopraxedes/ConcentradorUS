@@ -1,8 +1,6 @@
 package Package01;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
 
 //**********************************************************************************************************************
 //                                                                                                                     *                                                     *
@@ -83,7 +81,7 @@ public class Main {
                 if (MsgJson) {
                     String MsgJsonSrv = EnvRecMsg.MontaJson();
                     MsgRec = EnvRecMsg.JsonSrv(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
-                    System.out.println(MsgJsonSrv);
+                    //System.out.println(MsgJsonSrv);
                 }
                 else {
                     MsgRec = EnvRecMsg.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
