@@ -392,12 +392,12 @@ public class EnvRecMsg {
         KeyValue[12] = EntKeyValue("ENCG1", StrCT2Inv);
         KeyValue[13] = EntKeyValue("ENCG2", StrCT1Inv);
         KeyValue[14] = EntKeyValue("ENCG3", StrCT3Inv);
-        KeyValue[15] = EntKeyValue("ICG3", Util.FrmAna3(Icarga3," A"));
-        KeyValue[16] = EntKeyValue("VBAT", Util.FrmAna(VBat," V"));
-        KeyValue[17] = EntKeyValue("VREDE", Util.FrmAna(VRede," V"));
+        KeyValue[15] = EntKeyValue("ICG3", Util.FrmAna3(Icarga3));
+        KeyValue[16] = EntKeyValue("VBAT", Util.FrmAna(VBat));
+        KeyValue[17] = EntKeyValue("VREDE", Util.FrmAna(VRede));
         KeyValue[18] = EntKeyValue("ESTVRD", StrEstRede);
-        KeyValue[19] = EntKeyValue("TBAT", Util.FrmAna(TBat," C"));
-        KeyValue[20] = EntKeyValue("SDBAT", Util.FrmAnaInt(SDBat," %"));
+        KeyValue[19] = EntKeyValue("TBAT", Util.FrmAna(TBat));
+        KeyValue[20] = EntKeyValue("SDBAT", Util.FrmAnaInt(SDBat));
 
         // Estados e Medidas da Caixa d'Água e Bomba (7 Variáveis)
         KeyValue[21] = EntKeyValue("ESTCXAZ", StrEstCxAzul);
@@ -409,48 +409,48 @@ public class EnvRecMsg {
         KeyValue[27] = EntKeyValue("TMPBL", Util.FormAnaHora(TmpBmbLig));
 
         // Geração Solar e Consumo (18 variáveis)
-        KeyValue[28] = EntKeyValue("VP12", Util.FrmAna(VP12," V"));
-        KeyValue[29] = EntKeyValue("IS12", Util.FrmAna(IS12," A"));
-        KeyValue[30] = EntKeyValue("ISCC1", Util.FrmAna(ISCC1," A"));
-        KeyValue[31] = EntKeyValue("WSCC1", Util.FrmAna(WSCC1," W"));
-        KeyValue[32] = EntKeyValue("SDCC1", Util.FrmAnaInt(SDCC1," %"));
-        KeyValue[33] = EntKeyValue("VP34", Util.FrmAna(VP34," V"));
-        KeyValue[34] = EntKeyValue("IS34", Util.FrmAna(IS34," A"));
-        KeyValue[35] = EntKeyValue("ISCC2", Util.FrmAna(ISCC2," A"));
-        KeyValue[36] = EntKeyValue("WSCC2", Util.FrmAna(WSCC2," W"));
-        KeyValue[37] = EntKeyValue("SDCC2", Util.FrmAnaInt(SDCC2," %"));
-        KeyValue[38] = EntKeyValue("ITOTGER", Util.FrmAna(ITotGer," A"));
-        KeyValue[39] = EntKeyValue("WTOTGER", Util.FrmAna(WTotGer," W"));
-        KeyValue[40] = EntKeyValue("ITOTCG", Util.FrmAna(ITotCg," A"));
-        KeyValue[41] = EntKeyValue("WTOTCG", Util.FrmAna(WTotCg," W"));
+        KeyValue[28] = EntKeyValue("VP12", Util.FrmAna(VP12));
+        KeyValue[29] = EntKeyValue("IS12", Util.FrmAna(IS12));
+        KeyValue[30] = EntKeyValue("ISCC1", Util.FrmAna(ISCC1));
+        KeyValue[31] = EntKeyValue("WSCC1", Util.FrmAna(WSCC1));
+        KeyValue[32] = EntKeyValue("SDCC1", Util.FrmAnaInt(SDCC1));
+        KeyValue[33] = EntKeyValue("VP34", Util.FrmAna(VP34));
+        KeyValue[34] = EntKeyValue("IS34", Util.FrmAna(IS34));
+        KeyValue[35] = EntKeyValue("ISCC2", Util.FrmAna(ISCC2));
+        KeyValue[36] = EntKeyValue("WSCC2", Util.FrmAna(WSCC2));
+        KeyValue[37] = EntKeyValue("SDCC2", Util.FrmAnaInt(SDCC2));
+        KeyValue[38] = EntKeyValue("ITOTGER", Util.FrmAna(ITotGer));
+        KeyValue[39] = EntKeyValue("WTOTGER", Util.FrmAna(WTotGer));
+        KeyValue[40] = EntKeyValue("ITOTCG", Util.FrmAna(ITotCg));
+        KeyValue[41] = EntKeyValue("WTOTCG", Util.FrmAna(WTotCg));
         KeyValue[42] = EntKeyValue("ESTFT1", StrEstFonteCC1);
         KeyValue[43] = EntKeyValue("ESTFT2", StrEstFonteCC2);
-        KeyValue[44] = EntKeyValue("ICIRCC", Util.FrmAna3(ICircCC," A"));
-        KeyValue[45] = EntKeyValue("WCIRCC", Util.FrmAna(WCircCC," W"));
+        KeyValue[44] = EntKeyValue("ICIRCC", Util.FrmAna3(ICircCC));
+        KeyValue[45] = EntKeyValue("WCIRCC", Util.FrmAna(WCircCC));
 
         // Informação do Inversor 2 (10 Variáveis)
         KeyValue[46] = EntKeyValue("ESTIV2", StrEstIv2);
-        KeyValue[47] = EntKeyValue("IEIV2", Util.FrmAna(IEIv2," A"));
-        KeyValue[48] = EntKeyValue("WEIV2", Util.FrmAna(WEIv2," W"));
-        KeyValue[49] = EntKeyValue("VSIV2", Util.FrmAna(VSIv2," V"));
-        KeyValue[50] = EntKeyValue("ISIV2", Util.FrmAna3(ISInv2," A"));
-        KeyValue[51] = EntKeyValue("WSIV2", Util.FrmAna(WSInv2," W"));
-        KeyValue[52] = EntKeyValue("TDIV2", Util.FrmAna(TDInv2," C"));
-        KeyValue[53] = EntKeyValue("TTIV2", Util.FrmAna(TTInv2," C"));
-        KeyValue[54] = EntKeyValue("EFIV2", Util.FrmAnaInt(EfIv2," %"));
-        KeyValue[55] = EntKeyValue("SDIV2", Util.FrmAnaInt(SDIv2," %"));
+        KeyValue[47] = EntKeyValue("IEIV2", Util.FrmAna(IEIv2));
+        KeyValue[48] = EntKeyValue("WEIV2", Util.FrmAna(WEIv2));
+        KeyValue[49] = EntKeyValue("VSIV2", Util.FrmAna(VSIv2));
+        KeyValue[50] = EntKeyValue("ISIV2", Util.FrmAna3(ISInv2));
+        KeyValue[51] = EntKeyValue("WSIV2", Util.FrmAna(WSInv2));
+        KeyValue[52] = EntKeyValue("TDIV2", Util.FrmAna(TDInv2));
+        KeyValue[53] = EntKeyValue("TTIV2", Util.FrmAna(TTInv2));
+        KeyValue[54] = EntKeyValue("EFIV2", Util.FrmAnaInt(EfIv2));
+        KeyValue[55] = EntKeyValue("SDIV2", Util.FrmAnaInt(SDIv2));
 
         // Informação do Inversor 1 (10 Variáveis)
         KeyValue[56] = EntKeyValue("ESTIV1", StrEstIv2);
-        KeyValue[57] = EntKeyValue("IEIV1", Util.FrmAna(IEIv1," A"));
-        KeyValue[58] = EntKeyValue("WEIV1", Util.FrmAna(WEIv1," W"));
-        KeyValue[59] = EntKeyValue("VSIV1", Util.FrmAna(VSIv1," V"));
-        KeyValue[60] = EntKeyValue("ISIV1", Util.FrmAna3(ISInv1," A"));
-        KeyValue[61] = EntKeyValue("WSIV1", Util.FrmAna(WSInv1," W"));
-        KeyValue[62] = EntKeyValue("TDIV1", Util.FrmAna(TDInv1," C"));
-        KeyValue[63] = EntKeyValue("TTIV1", Util.FrmAna(TTInv1," C"));
-        KeyValue[64] = EntKeyValue("EFIV1", Util.FrmAnaInt(EfIv1," %"));
-        KeyValue[65] = EntKeyValue("SDIV1", Util.FrmAnaInt(SDIv1," %"));
+        KeyValue[57] = EntKeyValue("IEIV1", Util.FrmAna(IEIv1));
+        KeyValue[58] = EntKeyValue("WEIV1", Util.FrmAna(WEIv1));
+        KeyValue[59] = EntKeyValue("VSIV1", Util.FrmAna(VSIv1));
+        KeyValue[60] = EntKeyValue("ISIV1", Util.FrmAna3(ISInv1));
+        KeyValue[61] = EntKeyValue("WSIV1", Util.FrmAna(WSInv1));
+        KeyValue[62] = EntKeyValue("TDIV1", Util.FrmAna(TDInv1));
+        KeyValue[63] = EntKeyValue("TTIV1", Util.FrmAna(TTInv1));
+        KeyValue[64] = EntKeyValue("EFIV1", Util.FrmAnaInt(EfIv1));
+        KeyValue[65] = EntKeyValue("SDIV1", Util.FrmAnaInt(SDIv1));
 
         MsgJson = "{\n";
         for (short i = 0; i < numObj; i++) {

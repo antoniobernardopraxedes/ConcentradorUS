@@ -410,7 +410,7 @@ public class Util {
         int decimal;
         inteiro = valor / 100;
         decimal = valor - 100*inteiro;
-        String Valor = (inteiro + ",");
+        String Valor = (inteiro + ".");
         if (decimal > 9) {
             Valor = Valor + decimal;
         }
@@ -429,19 +429,19 @@ public class Util {
     //                                                                                                                 *
     //******************************************************************************************************************
     //
-    static String FrmAna(int valor, String Unidade) {
+    static String FrmAna(int valor) {
         int inteiro;
         int decimal;
         inteiro = valor / 100;
         decimal = valor - 100*inteiro;
-        String Valor = (inteiro + ",");
+        String Valor = (inteiro + ".");
         if (decimal > 9) {
             Valor = Valor + decimal;
         }
         else {
             Valor = Valor + "0" + decimal;
         }
-        return (Valor + Unidade);
+        return (Valor);
     }
 
     //******************************************************************************************************************
@@ -453,19 +453,19 @@ public class Util {
     //                                                                                                                 *
     //******************************************************************************************************************
     //
-    static String FrmAna3(int valor, String Unidade) {
+    static String FrmAna3(int valor) {
         int inteiro;
         int decimal;
         inteiro = valor / 1000;
         decimal = valor - 1000 * inteiro;
-        String Valor = (inteiro + ",");
+        String Valor = (inteiro + ".");
         if (decimal > 90) {
             Valor = Valor + decimal;
         }
         else {
             Valor = Valor + "0" + decimal;
         }
-        return (Valor + Unidade);
+        return (Valor);
     }
 
     //******************************************************************************************************************
@@ -482,7 +482,7 @@ public class Util {
         int decimal;
         inteiro = valor / 1000;
         decimal = valor - 1000 * inteiro;
-        String Valor = (inteiro + ",");
+        String Valor = (inteiro + ".");
         if (decimal > 90) {
             Valor = Valor + decimal;
         }
@@ -503,7 +503,7 @@ public class Util {
     //
     static String FormAnaInt(int valor) {
 
-        String Valor = (valor + " ");
+        String Valor = (valor + "");
 
         return (Valor);
     }
@@ -517,9 +517,9 @@ public class Util {
     //                                                                                                                 *
     //******************************************************************************************************************
     //
-    static String FrmAnaInt(int valor, String Unidade) {
+    static String FrmAnaInt(int valor) {
 
-        String Valor = (valor + Unidade);
+        String Valor = (valor + "");
 
         return (Valor);
     }

@@ -72,8 +72,6 @@ public class Main {
             byte[] MsgEnvSrv = new byte[0];
             if (cont >= 4) {
 
-
-
                 if (Verbose) System.out.println(" ");
                 MsgRec = "";
                 MsgEnvSrv = EnvRecMsg.CoAPUDP(IPConcArd, PortaUDP, "estados", ContMsgCoAP, Comando, Verbose);
