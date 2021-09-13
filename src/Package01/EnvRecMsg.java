@@ -541,12 +541,12 @@ public class EnvRecMsg {
     //                                                                                                                *
     // Nome do Método: Json                                                                                           *
     //	                                                                                                              *
-    // Funcao: envia para o cliente conectado uma mensagem HTTP lida de uma String                                    *
+    // Funcao: envia para o servidor conectado uma mensagem em formato Json lida de uma String e espera a resposta    *
     //                                                                                                                *
-    // Entrada: Socket de conexão, String com a Mensagem a ser Enviada; String com o Tipo da Mensagem,                *
-    //          boolean Verbose (habilita envio de mensagens para o terminal)                                         *
+    // Entrada: Endereço IP e POrta para conexão no Servidor, String com a Mensagem a ser Enviada; String com o       *
+    //          Recurso e boolean Verbose (habilita envio de mensagens para o terminal)                               *
     //                                                                                                                *
-    // Saida: se a mensagem foi enviada corretamente, retorna true                                                    *
+    // Saida: string com a mensagem de resposta do servidor                                                           *
     //	                                                                                                              *
     //*****************************************************************************************************************
     //
@@ -560,7 +560,7 @@ public class EnvRecMsg {
 
         try {
             Socket socket = new Socket(IPSrv, Porta);
-            socket.setSoTimeout(3000);
+            socket.setSoTimeout(5000);
 
             if (socket.isConnected()) {
                 String MsgTerm = "O Cliente Atualizador conectou ao " + socket.toString();
@@ -582,14 +582,13 @@ public class EnvRecMsg {
             EnvChar.println("Accept-Encoding: gzip, deflate, br\r");
             EnvChar.println("Connection: keep-alive\r");
             EnvChar.println("Content-length: " + TamMsg + "\r");
+            EnvChar.println();
 
             // Envia a Mensagem em Formato Json (UTF-8) para o Servidor
-            EnvChar.println();
             EnvChar.print(Msg);
             EnvChar.flush();
 
-            Util.Terminal("Enviada Mensagem HTTP application/json com "
-                               + TamMsg + " Caracteres para o Servidor", false, Verbose);
+            Util.Terminal("Enviada Mensagem Json com " + TamMsg + " Caracteres", false, Verbose);
 
             try {
                 String linha;
@@ -600,6 +599,7 @@ public class EnvRecMsg {
             }
             catch(java.net.SocketTimeoutException tmo) {
                 Util.Terminal("Timeout na resposta do Servidor", false, Verbose);
+                socket.close();
             }
             socket.close();
         }
