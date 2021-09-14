@@ -1,5 +1,4 @@
 package Package01;
-import java.io.IOException;
 import java.net.InetAddress;
 
 //**********************************************************************************************************************
@@ -14,7 +13,7 @@ import java.net.InetAddress;
 //
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         boolean Verbose = true;
         boolean MsgJson = true;
@@ -27,7 +26,7 @@ public class Main {
 
         String IPConcArd = "192.168.0.150";
         int PortaUDP = 5683;
-        int ContMsgCoAP = 0;
+        int CntMsgCoAP = 0;
         int TamMsgCoAP = 320;
 
         String Caminho = "/home/";
@@ -39,7 +38,7 @@ public class Main {
         byte Segundo;
         byte SegundoAnterior;
 
-        DH = Util.LeDataHora();
+        DH = SupService.LeDataHora();
         Segundo = DH[2];
         SegundoAnterior = Segundo;
 
@@ -50,39 +49,37 @@ public class Main {
             Caminho = "/home/pi/Desktop/Programas/";
             IPHost = "192.168.0.170";
 
-            Util.Terminal("Atualizador Iniciado no Computador Raspberry PI 3", true, true);
+            SupService.Terminal("Atualizador Iniciado no Computador Raspberry PI 3", true, true);
         }
         if (NomeComputador.equals("BernardoLinux")) {
             Caminho = "/home/antonio/ExecJava/";
             IPHost = "192.168.0.49";
             Verbose = true;
-            Util.Terminal("Atualizador Iniciado no Computador BernardoLinux", true, Verbose);
+            SupService.Terminal("Atualizador Iniciado no Computador BernardoLinux", true, Verbose);
         }
 
         int cont = 0;
         boolean fim = false;
         while (!fim) {
-            DH = Util.LeDataHora();
+            DH = SupService.LeDataHora();
             Segundo = DH[2];
             if (Segundo != SegundoAnterior) {
                 cont = cont + 1;
                 SegundoAnterior = Segundo;
             }
             String MsgRec = "";
-            byte[] MsgEnvSrv = new byte[0];
             if (cont >= 4) {
-
                 if (Verbose) System.out.println(" ");
-                MsgRec = "";
-                MsgEnvSrv = EnvRecMsg.CoAPUDP(IPConcArd, PortaUDP, "estados", ContMsgCoAP, Comando, Verbose);
+                byte[] MsgRecCoAP = SupService.CoAPUDP(IPConcArd, PortaUDP, "estados", CntMsgCoAP, Comando, Verbose);
+                byte[] MsgEnvSrv = Dados001.LeEstMedsPayload(MsgRecCoAP);
 
                 if (MsgJson) {
-                    String MsgJsonSrv = EnvRecMsg.MontaJson();
-                    MsgRec = EnvRecMsg.JsonSrv(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
+                    String MsgJsonSrv = Dados001.MontaJson();
+                    MsgRec = SupService.JsonSrv(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
                     //System.out.println(MsgJsonSrv);
                 }
                 else {
-                    MsgRec = EnvRecMsg.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
+                    MsgRec = SupService.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
                 }
                 cont = 0;
             }
@@ -99,10 +96,10 @@ public class Main {
                     Cmd = MsgRec.substring(indice1, indice2);
                     if (!(Cmd.isEmpty())) {
                         Comando = ExecComandoHTTP(Cmd, Verbose);
-                        Util.Terminal("Rec Msg de Comando do Serv: " + Cmd, false, Verbose);
+                        SupService.Terminal("Rec Msg de Comando do Serv: " + Cmd, false, Verbose);
                     }
                     else {
-                        Util.Terminal("Rec Msg de Reconhecimento do Serv", false, Verbose);
+                        SupService.Terminal("Rec Msg de Reconhecimento do Serv", false, Verbose);
                     }
                 }
             }
@@ -126,67 +123,67 @@ public class Main {
         int Comando = 0;
         if (comrechttp.equals("cmd=0002")) {
             Comando = 2;
-            Util.Terminal("Comando: Acerto Relogio", false, Verbose);
+            SupService.Terminal("Comando: Acerto Relogio", false, Verbose);
         }
         if (comrechttp.equals("cmd=0003")) {
             Comando = 3;
-            Util.Terminal("Comando: Modo Economia", false, Verbose);
+            SupService.Terminal("Comando: Modo Economia", false, Verbose);
         }
         if (comrechttp.equals("cmd=0004")) {
             Comando = 4;
-            Util.Terminal("Comando: Modo Normal", false, Verbose);
+            SupService.Terminal("Comando: Modo Normal", false, Verbose);
         }
         if (comrechttp.equals("cmd=0016")) {
             Comando = 16;
-            Util.Terminal("Comando: Manual Carga 1", false, Verbose);
+            SupService.Terminal("Comando: Manual Carga 1", false, Verbose);
         }
         if (comrechttp.equals("cmd=0017")) {
             Comando = 17;
-            Util.Terminal("Comando: Automatico Carga 1", false, Verbose);
+            SupService.Terminal("Comando: Automatico Carga 1", false, Verbose);
         }
         if (comrechttp.equals("cmd=0005")) {
             Comando = 5;
-            Util.Terminal("Comando: Manual Cargas 234", false, Verbose);
+            SupService.Terminal("Comando: Manual Cargas 234", false, Verbose);
         }
         if (comrechttp.equals("cmd=0006")) {
             Comando = 6;
-            Util.Terminal("Comando: Automatico Cargas 234", false, Verbose);
+            SupService.Terminal("Comando: Automatico Cargas 234", false, Verbose);
         }
         if (comrechttp.equals("cmd=0007")) {
             Comando = 7;
-            Util.Terminal("Comando: Habilita Carga 1", false, Verbose);
+            SupService.Terminal("Comando: Habilita Carga 1", false, Verbose);
         }
         if (comrechttp.equals("cmd=0008")) {
             Comando = 8;
-            Util.Terminal("Comando: Desabilita Carga 1", false, Verbose);
+            SupService.Terminal("Comando: Desabilita Carga 1", false, Verbose);
         }
         if (comrechttp.equals("cmd=0009")) {
             Comando = 9;
-            Util.Terminal("Comando: Habilita Carga 2", false, Verbose);
+            SupService.Terminal("Comando: Habilita Carga 2", false, Verbose);
         }
         if (comrechttp.equals("cmd=0010")) {
             Comando = 10;
-            Util.Terminal("Comando: Desabilita Carga 2", false, Verbose);
+            SupService.Terminal("Comando: Desabilita Carga 2", false, Verbose);
         }
         if (comrechttp.equals("cmd=0011")) {
             Comando = 11;
-            Util.Terminal("Comando: Habilita Carga 3", false, Verbose);
+            SupService.Terminal("Comando: Habilita Carga 3", false, Verbose);
         }
         if (comrechttp.equals("cmd=0012")) {
             Comando = 12;
-            Util.Terminal("Comando: Desabilita Carga 3", false, Verbose);
+            SupService.Terminal("Comando: Desabilita Carga 3", false, Verbose);
         }
         if (comrechttp.equals("cmd=0013")) {
             Comando = 13;
-            Util.Terminal("Comando: Habilita Carga 4", false, Verbose);
+            SupService.Terminal("Comando: Habilita Carga 4", false, Verbose);
         }
         if (comrechttp.equals("cmd=0014")) {
             Comando = 14;
-            Util.Terminal("Comando: Desabilita Carga 4", false, Verbose);
+            SupService.Terminal("Comando: Desabilita Carga 4", false, Verbose);
         }
         if (comrechttp.equals("cmd=0015")) {
             Comando = 15;
-            Util.Terminal("Comando: Apaga Indicadores de Falha", false, Verbose);
+            SupService.Terminal("Comando: Apaga Indicadores de Falha", false, Verbose);
         }
         return(Comando);
     }
