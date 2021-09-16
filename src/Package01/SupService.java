@@ -229,13 +229,19 @@ public class SupService {
             SupService.Terminal("Enviada Mensagem Json com " + TamMsg + " Caracteres", false, Verbose);
 
             try {
-                for (int i = 0; i < 13; i++) {
-                    String linha;
-                    //while ((linha = RecChar.readLine()) != null) {
-                    linha = RecChar.readLine();
-                    MsgSrv = MsgSrv + linha + "\n";
-                    //}
-                }
+
+                char[] MsgRecSrvChar = new char[512];
+                RecChar.read(MsgRecSrvChar);
+                char Ch = 0;
+                int i = 0;
+                do {
+                    Ch = MsgRecSrvChar[i];
+                    if (Ch != 0) {
+                        MsgSrv = MsgSrv + Ch;
+                    }
+                    i = i + 1;
+                } while ((Ch != 0) && (i < 512));
+
                 SupService.Terminal("Recebida Mensagem do Servidor", false, Verbose);
 
                 //System.out.println("");
