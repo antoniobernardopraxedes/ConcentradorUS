@@ -7,8 +7,99 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.StringTokenizer;
 
 public class SupService {
+
+    private static boolean verbose;
+    private static String endIpServidor;
+    private static String endIpConcArd;
+    private static String endIPHost;
+
+    public static boolean isVerbose() {
+        return verbose;
+    }
+
+    public static String getEndIpServidor() {
+        return endIpServidor;
+    }
+
+    public static String getEndIpConcArd() {
+        return endIpConcArd;
+    }
+
+    public static String getEndIPHost() {
+        return endIPHost;
+    }
+
+    //******************************************************************************************************************
+    // Nome do Método: LeArquivoConfiguracao()                                                                         *
+    //	                                                                                                               *
+    // Funcao: lê o arquivo de configuração                                                                            *
+    //                                                                                                                 *
+    // Entrada: não tem                                                                                                *
+    //                                                                                                                 *
+    // Saida: boolean: true: o arquivo de configuração foi lido corretamente / false: falha em ler o arquivo           *
+    //******************************************************************************************************************
+    //
+    public static boolean LeArquivoConfiguracao() {
+        boolean leArqOK = true;
+        String arquivoTxt = null;
+        String caminho = "recursos/";
+        String nomeArquivo = "concentradorus.cnf";
+
+        Arquivo arquivo = new Arquivo();
+
+        try {
+            if (arquivo.Existe(caminho, nomeArquivo)) {
+                arquivoTxt = arquivo.LeTexto(caminho, nomeArquivo);
+
+                String Verbose = LeParametroArqConf(arquivoTxt, "Verbose:");
+                String EndIpServidor = LeParametroArqConf(arquivoTxt, "EndIpServidor:");
+                String EndIpConcArduino = LeParametroArqConf(arquivoTxt, "EndIpConcArduino:");
+                String EndIPHost = LeParametroArqConf(arquivoTxt, "EndIPHost:");
+
+                if (Verbose.equals("true")) {
+                    verbose = true;
+                }
+                else {
+                    verbose = false;
+                }
+                endIpServidor = EndIpServidor;
+                endIpConcArd = EndIpConcArduino;
+                endIPHost = EndIPHost;
+            }
+            else {
+                leArqOK = false;
+            }
+        } catch (Exception e) {
+            leArqOK = false;
+        }
+        return leArqOK;
+    }
+
+    //******************************************************************************************************************
+    // Nome do Método: LeParametroArqConf                                                                              *
+    //	                                                                                                               *
+    // Funcao: lê um parâmetro após um token de idenfificação em um arquivo texto (configuração)                       *
+    //                                                                                                                 *
+    // Entrada: string com o arquivo texto e string com o token                                                        *
+    //                                                                                                                 *
+    // Saida: string com o parâmetro lido após o token de identificação.                                               *
+    //******************************************************************************************************************
+    //
+    private static String LeParametroArqConf (String arquivo, String token){
+        int Indice = arquivo.lastIndexOf(token);
+        int indiceF = arquivo.length() - 1;
+        String parametro = null;
+        if (Indice >= 0) {
+            Indice = Indice + token.length() + 1;
+            String Substring = arquivo.substring(Indice, indiceF);
+            StringTokenizer parseToken = new StringTokenizer(Substring);
+            parametro = parseToken.nextToken();
+        }
+        return parametro;
+    }
 
     //******************************************************************************************************************
     //                                                                                                                 *
@@ -138,25 +229,28 @@ public class SupService {
             SupService.Terminal("Enviada Mensagem Json com " + TamMsg + " Caracteres", false, Verbose);
 
             try {
-                String linha;
-                while ((linha = RecChar.readLine()) != null) {
+                for (int i = 0; i < 13; i++) {
+                    String linha;
+                    //while ((linha = RecChar.readLine()) != null) {
+                    linha = RecChar.readLine();
                     MsgSrv = MsgSrv + linha + "\n";
+                    //}
                 }
                 SupService.Terminal("Recebida Mensagem do Servidor", false, Verbose);
 
-                System.out.println("");
-                System.out.println(MsgSrv);
+                //System.out.println("");
+                //System.out.println(MsgSrv);
 
-                //socket.close();
+                socket.close();
             }
             catch(java.net.SocketTimeoutException tmo) {
                 SupService.Terminal("Timeout na resposta do Servidor", false, Verbose);
-                //socket.close();
+                socket.close();
             }
         } catch (IOException ioe) {
             MsgEnvOK = false;
             SupService.Terminal("Erro ao enviar a mensagem HTTP para o Servidor: " + ioe, false, Verbose);
-            //socket.close();
+            socket.close();
         }
         return MsgSrv;
 
@@ -195,9 +289,10 @@ public class SupService {
     // Option (Opções) = 0000 0000 (não é usado) / Identificador de Início do Payload: 1111 1111                       *
     //******************************************************************************************************************
     //
-    static byte[] CoAPUDP(String EndIP, int Porta, String URI, int ContMsgCoAP, int Comando, boolean Verbose) {
+    static byte[] CoAPUDP(String EndIP, String URI, int ContMsgCoAP, int Comando, boolean Verbose) {
         int TamMsgRspCoAP = 320;
         int TamMsgSrv = 320;
+        int PortaUDP = 5683;
         byte [] MsgRecCoAP = new byte[TamMsgRspCoAP];
         byte [] MsgEnvSrv = new byte[TamMsgSrv];
 
@@ -246,7 +341,7 @@ public class SupService {
             DatagramSocket clientSocket = new DatagramSocket();
             InetAddress IPAddress = InetAddress.getByName(EndIP);
             clientSocket.setSoTimeout(1000);
-            DatagramPacket sendPacket = new DatagramPacket(MsgReqCoAP, TamCab, IPAddress, Porta);
+            DatagramPacket sendPacket = new DatagramPacket(MsgReqCoAP, TamCab, IPAddress, PortaUDP);
             DatagramPacket receivePacket = new DatagramPacket(MsgRecCoAP, TamMsgRspCoAP);
 
             clientSocket.send(sendPacket);

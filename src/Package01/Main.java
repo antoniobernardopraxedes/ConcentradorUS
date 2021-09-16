@@ -15,23 +15,26 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        boolean Verbose = true;
-        boolean MsgJson = true;
-
-        //String EndIPSrv = "200.98.140.180";
-        //String EndIPSrv = "192.168.0.49";
-        String EndIPSrv = "localhost";
         int PortaSrv = 8080;
         String Recurso = "atualiza";
+        boolean MsgJson = true;
 
-        String IPConcArd = "192.168.0.150";
-        int PortaUDP = 5683;
+        boolean leArqOK = SupService.LeArquivoConfiguracao();
+        boolean Verbose = SupService.isVerbose();
+        String EndIPSrv = SupService.getEndIpServidor();
+        String IPConcArd = SupService.getEndIpConcArd();
+        String EndIPHost = SupService.getEndIPHost();
+
+        if (leArqOK) {
+            SupService.Terminal("Atualizador Iniciado", true, true);
+            SupService.Terminal("Endereço IP do Servidor: " + EndIPSrv, false, true);
+            SupService.Terminal("Endereço IP do Concentrador Arduino: " + IPConcArd, false, true);
+            SupService.Terminal("Endereço IP do Computador Local: " + EndIPHost, false, true);
+        } else{
+            SupService.Terminal("Falha em Ler o Arquivo de Configuração", false, true);
+        }
+
         int CntMsgCoAP = 0;
-        int TamMsgCoAP = 320;
-
-        String Caminho = "/home/";
-        //String IPHost = "192.168.0.170";
-        String IPHost = "localhost";
         int Comando = 0;
 
         byte DH [] = new byte[6];
@@ -42,25 +45,9 @@ public class Main {
         Segundo = DH[2];
         SegundoAnterior = Segundo;
 
-        InetAddress ip = InetAddress.getLocalHost();
-        String NomeComputador = "";
-        NomeComputador = ip.getHostName();
-        if (NomeComputador.equals("raspberrypi")) {
-            Caminho = "/home/pi/Desktop/Programas/";
-            IPHost = "192.168.0.170";
-
-            SupService.Terminal("Atualizador Iniciado no Computador Raspberry PI 3", true, true);
-        }
-        if (NomeComputador.equals("BernardoLinux")) {
-            Caminho = "/home/antonio/ExecJava/";
-            IPHost = "192.168.0.49";
-            Verbose = true;
-            SupService.Terminal("Atualizador Iniciado no Computador BernardoLinux", true, Verbose);
-        }
-
         int cont = 0;
         boolean fim = false;
-        while (!fim) {
+        while (leArqOK) {
             DH = SupService.LeDataHora();
             Segundo = DH[2];
             if (Segundo != SegundoAnterior) {
@@ -70,16 +57,16 @@ public class Main {
             String MsgRec = "";
             if (cont >= 4) {
                 if (Verbose) System.out.println(" ");
-                byte[] MsgRecCoAP = SupService.CoAPUDP(IPConcArd, PortaUDP, "estados", CntMsgCoAP, Comando, Verbose);
+                byte[] MsgRecCoAP = SupService.CoAPUDP(IPConcArd, "estados", CntMsgCoAP, Comando, Verbose);
                 byte[] MsgEnvSrv = Dados001.LeEstMedsPayload(MsgRecCoAP);
 
                 if (MsgJson) {
                     String MsgJsonSrv = Dados001.MontaJson();
-                    MsgRec = SupService.JsonSrv(EndIPSrv, PortaSrv, IPHost, MsgJsonSrv, Recurso, Verbose );
+                    MsgRec = SupService.JsonSrv(EndIPSrv, PortaSrv, EndIPHost, MsgJsonSrv, Recurso, Verbose );
                     //System.out.println(MsgJsonSrv);
                 }
                 else {
-                    MsgRec = SupService.BinSrv(EndIPSrv, PortaSrv, IPHost, MsgEnvSrv, Recurso, Verbose);
+                    MsgRec = SupService.BinSrv(EndIPSrv, PortaSrv, EndIPHost, MsgEnvSrv, Recurso, Verbose);
                 }
                 cont = 0;
             }
